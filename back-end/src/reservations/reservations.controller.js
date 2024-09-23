@@ -99,15 +99,19 @@ const hasValidProperties = (req, res, next) => {
 */
 
 function mobileNumberValidation(req, res, next) {
-  const { data:  {mobile_number}  = {}} = req.body
+  const { data: { mobile_number } = {} } = req.body;
 
-   if(mobile_number.length === 10) {
-    return next()
-    }
-    next({
-      status: 400,
-      message: `Please include a valid mobile_number.`,
-    });
+  // Adjust regex to match the format 800-555-1212
+  const format = /^\d{3}-\d{3}-\d{4}$/;
+
+  if (typeof mobile_number === 'string' && format.test(mobile_number)) {
+    return next();
+  }
+
+  return next({
+    status: 400,
+    message: `Please include a valid mobile_number.`,
+  });
 }
   
 const futureDateValidation = (req, res, next) => {

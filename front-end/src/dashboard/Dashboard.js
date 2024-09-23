@@ -69,18 +69,20 @@ function Dashboard({ date }) {
     return () => abortController.abort();
   }, []);
 
-  const listRsvp = reservations.map((reservation) => {
-    return (
-      <ReservationsList
-        key={reservation.reservation_id}
-        reservation={reservation}
-      />
-    );
-  });
+  const listRsvp = reservations.map((reservation) => (
+    <ReservationsList
+      key={reservation.reservation_id}
+      reservation={reservation}
+    />
+  ));
 
   return (
     <main>
       <h1 className="text-center">Dashboard</h1>
+      <ErrorAlert error={reservationsError} />
+      {reservations.length === 0 && !reservationsError.length && (
+        <h5 className="text-center">No reservations for {dateString}</h5>
+      )}
       <div>
         <div className="text-center">
           <button
@@ -115,23 +117,15 @@ function Dashboard({ date }) {
           <h5 className="text-center"> Reservations for {dateString}</h5>
         </div>
       </div>
-      <ErrorAlert error={reservationsError} />
       <div className="container">
         <div className="row">
           <div className="col-lg-6 col-xs-1">{listRsvp}</div>
           <div className="col-lg-6 col-xs-1">
             <h4 className="text-center">Tables</h4>
             <div>
-              {tables.map((table, id) => {
-                return (
-                  <div key={table.table_id}>
-                    <TableList
-                      setTablesError={setReservationsError}
-                      table={table}
-                    />
-                  </div>
-                );
-              })}
+              {tables.map((table) => (
+                <TableList key={table.table_id} setTablesError={setReservationsError} table={table} />
+              ))}
             </div>
           </div>
         </div>

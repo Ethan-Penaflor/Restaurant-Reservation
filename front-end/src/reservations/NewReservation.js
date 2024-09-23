@@ -27,27 +27,26 @@ function NewReservation() {
     });
   };
 
-  // Initialize a variable with reservation object
-  // restore reservations data to its initial state
-  // change the value of  rsvp.people to a number
-  // Send a post request with the new reservation using postReservation
   async function handleSubmit(event) {
-    const abortController = new AbortController();
     event.preventDefault();
-
+    
     try {
-      let rsvp = formData;
-      rsvp.people = Number(rsvp.people);
-      await postReservations(rsvp, abortController.signal);
+      let rsvp = {
+        ...formData,
+        reservation_date: new Date(formData.reservation_date).toISOString().split('T')[0], // Ensure it's YYYY-MM-DD
+        people: Number(formData.people),
+      };
+      const response = await postReservations(rsvp);
+      
+      // Log response for debugging
+      console.log("Response from postReservations:", response);
+  
       setFormData(initialFormState);
       history.push(`/dashboard?date=${rsvp.reservation_date}`);
     } catch (error) {
       setReservationError([...reservationError, error.message]);
+      console.error("Error creating reservation:", error);
     }
-
-    return () => {
-      abortController.abort();
-    };
   }
 
   return (

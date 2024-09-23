@@ -19,7 +19,7 @@ export default function ReservationForm({
               id="first_name"
               placeholder="First Name"
               onChange={handleChange}
-              value={`${reservation.first_name}`}
+              value={reservation.first_name} // Removed template literal
               required={true}
             />
           </div>
@@ -34,7 +34,7 @@ export default function ReservationForm({
               id="last_name"
               placeholder="Last Name"
               onChange={handleChange}
-              value={`${reservation.last_name}`}
+              value={reservation.last_name} // Removed template literal
               required={true}
             />
           </div>
@@ -44,13 +44,13 @@ export default function ReservationForm({
           <div className="col-sm-8">
             <input
               type="tel"
-              pattern="[0-9]{10}"
+              pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" // Updated pattern for format
               name="mobile_number"
               className="form-control"
               id="mobile_number"
-              placeholder="(---) --- ----"
+              placeholder="(800) 555-1212"
               onChange={handleChange}
-              value={`${reservation.mobile_number}`}
+              value={reservation.mobile_number} // Removed template literal
               required={true}
             />
           </div>
@@ -63,10 +63,8 @@ export default function ReservationForm({
               name="reservation_date"
               className="form-control"
               id="reservation_date"
-              placeholder="YYYY-MM-DD"
-              pattern="\d{4}-\d{2}-\d{2}"
               onChange={handleChange}
-              value={`${reservation.reservation_date}`}
+              value={reservation.reservation_date} // Removed template literal
               required={true}
             />
           </div>
@@ -79,10 +77,8 @@ export default function ReservationForm({
               name="reservation_time"
               className="form-control"
               id="reservation_time"
-              placeholder="HH:MM"
-              pattern="[0-9]{2}:[0-9]{2}"
               onChange={handleChange}
-              value={`${reservation.reservation_time}`}
+              value={reservation.reservation_time} // Removed template literal
               required={true}
             />
           </div>
@@ -97,7 +93,7 @@ export default function ReservationForm({
               id="people"
               placeholder="Party Size"
               onChange={handleChange}
-              value={`${reservation.people}`}
+              value={reservation.people} // Removed template literal
               min="1"
               required={true}
             />
@@ -105,7 +101,7 @@ export default function ReservationForm({
         </div>
         <div className="text-center">
           <Link to={"/"}>
-            <button className="btn btn-dark btn-lg mr-3">Cancel</button>
+            <button type="button" className="btn btn-dark btn-lg mr-3">Cancel</button>
           </Link>
           <button className="btn btn-outline-dark btn-lg" type="submit">
             Submit

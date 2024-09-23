@@ -28,14 +28,14 @@ export default function EditReservation() {
           reservation_id,
           abortController.signal
         );
-        recallReservation.reservation_date =
+        recallReservation.reservation_date = 
           recallReservation.reservation_date.split("T")[0];
 
         initialFormData.current = {
           first_name: recallReservation.first_name,
           last_name: recallReservation.last_name,
           mobile_number: recallReservation.mobile_number,
-          reservation_date: recallReservation.reservation_date,
+          reservation_date: recallReservation.reservation_date, // Ensure format is YYYY-MM-DD
           reservation_time: recallReservation.reservation_time,
           people: recallReservation.people,
         };
@@ -53,21 +53,20 @@ export default function EditReservation() {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    formData.people = Number(formData.people);
-    const putReservation = async () => {
-      try {
-        await updateReservation(
-          formData,
-          reservation_id,
-          abortController.signal
-        );
-        history.push(`/dashboard?date=${formData.reservation_date}`);
-      } catch (error) {
-        setErrorArray([error.message]);
-      }
-    };
+    formData.people = Number(formData.people); // Convert people to a number
 
-    putReservation();
+    try {
+      // Ensure reservation_date is in the correct format (YYYY-MM-DD)
+      const updatedReservation = {
+        ...formData,
+        reservation_date: new Date(formData.reservation_date).toISOString().split('T')[0],
+      };
+      
+      await updateReservation(updatedReservation, reservation_id, abortController.signal);
+      history.push(`/dashboard?date=${updatedReservation.reservation_date}`);
+    } catch (error) {
+      setErrorArray([error.message]);
+    }
   };
 
   const handleChange = ({ target }) => {
