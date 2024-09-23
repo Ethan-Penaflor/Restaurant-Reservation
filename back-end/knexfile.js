@@ -8,18 +8,29 @@ require('dotenv').config();
 const path = require("path");
 
 const {
-  DATABASE_URL = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_DEVELOPMENT = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_TEST = "postgresql://postgres@localhost/postgres",
-  DATABASE_URL_PREVIEW = "postgresql://postgres@localhost/postgres",
+  DB_HOST,
+  DB_PORT,
+  DB_NAME,
+  DB_USER,
+  DB_PASSWORD,
+  DB_SSL,
   DEBUG,
 } = process.env;
+
+const connection = {
+  host: DB_HOST,
+  port: DB_PORT,
+  database: DB_NAME,
+  user: DB_USER,
+  password: DB_PASSWORD,
+  ssl: DB_SSL === 'true' ? { rejectUnauthorized: false } : false, // Handle SSL connection
+};
 
 module.exports = {
   development: {
     client: "postgresql",
+    connection,
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_DEVELOPMENT,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -30,8 +41,8 @@ module.exports = {
   },
   test: {
     client: "postgresql",
+    connection,
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_TEST,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -42,8 +53,8 @@ module.exports = {
   },
   preview: {
     client: "postgresql",
+    connection,
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL_PREVIEW,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
@@ -54,8 +65,8 @@ module.exports = {
   },
   production: {
     client: "postgresql",
+    connection,
     pool: { min: 1, max: 5 },
-    connection: DATABASE_URL,
     migrations: {
       directory: path.join(__dirname, "src", "db", "migrations"),
     },
